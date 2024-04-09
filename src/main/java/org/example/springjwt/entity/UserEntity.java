@@ -2,6 +2,7 @@ package org.example.springjwt.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import org.apache.catalina.User;
 
 @Entity
 @Getter
@@ -15,6 +16,11 @@ public class UserEntity {
     private String password;
 
     private String role;
+
+    public UserEntity(){
+
+    }
+
     public UserEntity(String username, String password, String role) {
         this.username = username;
         this.password = password;
