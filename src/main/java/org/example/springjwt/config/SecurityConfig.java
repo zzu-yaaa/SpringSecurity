@@ -1,5 +1,6 @@
 package org.example.springjwt.config;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.apache.catalina.User;
 import org.example.springjwt.jwt.JWTFilter;
 import org.example.springjwt.jwt.JWTUtil;
@@ -14,6 +15,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+
+import java.util.Collections;
 
 @Configuration
 @EnableWebSecurity
@@ -42,6 +47,25 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+
+        //프론트와 통신을 위한 cors 설정
+        http
+                .cors((corsCustomizer -> corsCustomizer.configurationSource(request -> {
+
+                    CorsConfiguration configuration = new CorsConfiguration();
+
+                    configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+                    configuration.setAllowedMethods(Collections.singletonList("*"));
+                    configuration.setAllowCredentials(true);
+                    configuration.setAllowedHeaders(Collections.singletonList("*"));
+                    configuration.setMaxAge(3600L);
+
+                    configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+
+                    return configuration;
+                })));
+
+        return http.build();
 
         //csrf disable
         //jwt의 경우 세션을 stateless하게 관리 -> csrf 공격에 대한 방어 필요 x
