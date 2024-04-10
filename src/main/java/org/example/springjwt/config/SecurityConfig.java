@@ -1,6 +1,7 @@
 package org.example.springjwt.config;
 
 import org.apache.catalina.User;
+import org.example.springjwt.jwt.JWTFilter;
 import org.example.springjwt.jwt.JWTUtil;
 import org.example.springjwt.jwt.LoginFilter;
 import org.springframework.context.annotation.Bean;
@@ -68,7 +69,8 @@ public class SecurityConfig {
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS));
 
         http
-                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class);
+                .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtUtil), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JWTFilter(jwtUtil), LoginFilter.class);
 
         return http.build();
     }
