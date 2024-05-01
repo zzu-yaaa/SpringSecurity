@@ -1,7 +1,6 @@
 package org.example.springjwt.service;
 
-import org.example.springjwt.dto.GoogleResponse;
-import org.example.springjwt.dto.OAuth2Response;
+import org.example.springjwt.dto.*;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
@@ -27,5 +26,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
 
         //추후 작성
+        //리소스 서버에서 발급 받은 정보로 사용자를 특정할 아이디값을 만듬
+        String username = oAuth2Response.getProvider()+" "+oAuth2Response.getProviderId();
+
+        UserDTO userDTO = UserDTO.builder()
+                .username(username)
+                .name(oAuth2Response.getName())
+                .role(Role.ROLE_MEMBER)
+                .build();
+
+        return new CustomOAuth2User(userDTO);
+
     }
 }
