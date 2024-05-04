@@ -1,29 +1,37 @@
 package org.example.springjwt.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import org.apache.catalina.User;
+import lombok.NoArgsConstructor;
+import org.example.springjwt.dto.Role;
 
 @Entity
 @Getter
 @Table(name = "Member")
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class UserEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
     private String username;
-    private String password;
+    private String name;
 
-    private String role;
+    private String email;
 
-    public UserEntity(){
+    private Enum<Role> role;
 
+    public void setName(String name){
+        this.name = name;
     }
 
-    public UserEntity(String username, String password, String role) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
+    public void setEmail(String email){
+        this.email = email;
     }
+
 }
